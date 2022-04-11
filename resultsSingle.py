@@ -1,25 +1,35 @@
 import cv2
 import numpy as np
 import os
+import matplotlib.pyplot as plt
 
 tp = 0
 tn = 0
 fp = 0
 fn = 0
 
-path = 'C:/Users/hriro/Desktop/MRIsplitted2/doctor'
-for ti in os.listdir(path):
-    if "tif" in ti:
+#pathDoctor = 'C:/Users/hriro/Desktop/MRIsplitted/doctor'
+#pathPrediction = "preds/"
+
+pathDoctor = "15_mask.tif"
+pathPrediction = "15_pred.png"
+
+ti = ""
+
+#for ti in os.listdir(pathDoctor):
+    #if "tif" in ti:
+if True:
+    if True:
         print(ti)
-        doctorMask = cv2.imread(path + "/" + ti, cv2.IMREAD_GRAYSCALE)
+        doctorMask = cv2.imread(pathDoctor , cv2.IMREAD_GRAYSCALE)
 
         ti = ti[:-9]
         ti = ti.replace('_', '')
         ti = ti + "_pred.png"
 
-        (t1, predictionMask) = cv2.threshold(cv2.imread("tifonlypreds/" + ti, cv2.IMREAD_GRAYSCALE), 100, 255, cv2.THRESH_BINARY)
+        (t1, predictionMask) = cv2.threshold(cv2.imread(pathPrediction, cv2.IMREAD_GRAYSCALE), 100, 255, cv2.THRESH_BINARY)
 
-        #doctorMask = cv2.resize(doctorMask, (128, 128))
+        cv2.imwrite("newpred.png", predictionMask)
 
         predictionMask = np.array(predictionMask)
         predictionMask = np.where(predictionMask > 0, 1, predictionMask)
@@ -49,3 +59,19 @@ print("True Negative Pixels : " + str(tn) + " (" + str("{:.2f}".format(tn / sum 
 print("False Positive Pixels : " + str(fp) + " (" + str("{:.2f}".format(fp / sum * 100)) + "%)")
 print("False Negative Pixels : " + str(fn) + " (" + str("{:.2f}".format(fn / sum * 100)) + "%)")
 print("DSC : " + str("{:.2f}".format(2*tp/(2*tp + fp + fn))))
+
+
+im0 = cv2.imread("15_mask.tif")
+plt.imshow(im0)
+
+plt.show()
+
+im1 = cv2.imread("15_pred.png")
+plt.imshow(im1)
+
+plt.show()
+
+im2 = cv2.imread("newpred.png")
+plt.imshow(im2)
+
+plt.show()
